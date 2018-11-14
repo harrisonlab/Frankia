@@ -112,7 +112,7 @@ echo $file_short
 cp /home/hulinm/frankia/annotation/"$file_short"/*.faa /home/hulinm/frankia/annotation/"$file_short"/"$file_short".faa 
 
 
-# Move all faa files to orthomcl directory within /home/hulinm/pseudomonas_data/pseudomonas/assembly/pangenomics/orthomcl
+# Move all faa files to orthomcl directory within /home/hulinm/frankia/analysis/orthofinder/formatted
 
 cp /home/hulinm/frankia/annotation/*/*.faa .
 
