@@ -46,7 +46,7 @@ wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/420/875/GCA_001420875.1_Avc1
 wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/001/421/075/GCA_001421075.1_ASM142107v1/GCA_001421075.1_ASM142107v1_genomic.fna.gz
 
 
-# Make Prokka database 
+# Make PROKKA database using the Frankia genbank files 
 
 prokka-genbank_to_fasta_db *gbff > frankia.faa
 cd-hit -i frankia.faa -o frankia -T 0 -M 0 -g 1 -s 0.8 -c 0.9
@@ -54,18 +54,16 @@ rm -fv frankia.faa frankia.bak.clstr frankia.clstr
 makeblastdb -dbtype prot -in frankia
 mv frankia.p* /home/hulinm/local/src/prokka/db/genus/
 
-# Run annotation and gzip file 
+# Run PROKKA annotation and then gzip fasta files
 for file in /home/hulinm/frankia/genomes/*.fa ; do 
 file_short=$(basename $file | sed s/".fa"//g) 
 prokka  --usegenus --genus frankia $file --outdir $file_short
 gzip $file 
 done 
 
-## Filtering of genomes based on GWAS paper (Levy et al. 2018)
-
-# Only keep those with N50 >=40000bp (348 genomes) 50000 as in paper was only 260 genomes. Will need to compare results see if taking down to 40000 is detrimental 
+## Filtering of genomes based on bacteial GWAS paper (Levy et al. 2018)
+# Only keep those with N50 >=40000bp. 
 # First run quast.py on all genomes to get report
-# Transpose the report in excel to flip columns/rows
 
 
 python /home/hulinm/git_repos/tools/analysis/python_effector_scripts/extract_N50filtered_genomes.py transposed_report.tsv > report2.txt 
@@ -74,9 +72,7 @@ for file in $(cat /home/hulinm/frankia/genomes/quast_results/results_2018_11_03_
 cp "$file".fa ./filtered/
 done
 
-
-
-# CheckM contamination screen 
+# CheckM contamination screen to remove those genomes that have >5% contamination level
 
 for file in ./*.fa ; do
     file_short=$(basename $file | sed s/".fa"//g)
@@ -103,7 +99,7 @@ done
 
 
 
-# OrthoFinder
+# OrthoFinder for orthology analysis
 
 # Rename ffn file to contain genome name not PROKKA output 
 for file in /home/hulinm/frankia/genomes/*.fa ; do 
@@ -140,11 +136,9 @@ echo $file_short
 mv /home/hulinm/frankia/analysis/"$file_short".fasta /home/hulinm/frankia/analysis/orthofinder/formatted/"$file_short".fasta
 
 
-# OrthoFinder
+# OrthoFinder run
 
 /home/hulinm/local/src/OrthoFinder-2.2.7_source/orthofinder/orthofinder.py  -f formatted -t 16 -S diamond 
-
-
 
 
 
