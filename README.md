@@ -287,6 +287,10 @@ sed s/"\t"/", "/g partition > partition_file
 
 qsub /home/hulinm/git_repos/pseudomonas/orthomcl/sub_raxml_partition_aa.sh combined.phy output partition_file
 
+# Run IQTREE 
+
+qsub /home/hulinm/git_repos/pseudomonas/orthomcl/sub_iqtree_boots.sh combined.phy2  partition_file 000421445 
+
 
 # blasting nod genes 
 
