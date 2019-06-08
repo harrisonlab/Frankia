@@ -1,0 +1,77 @@
+# R phylogenetic tree for Frankia information
+
+library(ape)
+library(ggplot2)
+library(ggtree)
+library(phangorn)
+
+tree <- read.nexus("/Users/hulinm/Documents/frankia_tree_geneious.tre")
+mydata <- read.csv("/Users/hulinm/Documents/frankia_traits.csv", stringsAsFactors=FALSE, colClasses='character')
+
+rownames(mydata) <- mydata$Assembly
+
+
+# assign tree to variable
+q <- ggtree(tree)
+
+# Add bootstraps less than 100
+d <- q$data
+d <- d[!d$isTip,]
+d$label <- as.numeric(d$label)
+d <- d[d$label < 100,]
+
+heatmap<-mydata[c(6,9,10)]
+
+
+# Plot the tree and save to pdf 
+q2<- q +  geom_text2(data=d, aes(label=label), size=1.5, adj = -0.2)
+q3 <- q2 %<+% mydata + geom_tiplab(aes(color=clade), size=3, hjust=-0.25)
+
+
+q4<-gheatmap(q3, heatmap, width=0.1, offset=0.1, font.size=2, colnames_angle=90, colnames_position='top',colnames_offset_y=1)  + scale_fill_manual(breaks=c("Betulaceae","Datiscaceae","Elaeagnaceae","Casuarinaceae","Coriariaceae","Rhamnaceae","Myricaceae","N.America","S.Asia","Africa","SE.Asia","S.America","Europe","n","y") , values=c("brown1","darkseagreen1","seagreen3","royalblue1","skyblue1","lightcoral","darkorange","springgreen4","white","cornflowerblue","plum3","dodgerblue4","darkgoldenrod1","lightpink","black"))
+
+pdf(file = "/Users/hulinm/Documents/frankia_tree.pdf",width=7.2,height=10)
+q4+theme(legend.position="bottom", legend.title=element_blank()) + guides(colour=FALSE) 
+dev.off()
+
+
+# Adding auxin genes 
+
+# R phylogenetic tree for Frankia information
+
+library(ape)
+library(ggplot2)
+library(ggtree)
+library(phangorn)
+
+tree <- read.nexus("/Users/hulinm/Documents/frankia_tree_geneious.tre")
+mydata <- read.csv("/Users/hulinm/Documents/frankia_traits2.csv", stringsAsFactors=FALSE, colClasses='character')
+
+rownames(mydata) <- mydata$Assembly
+
+
+# assign tree to variable
+q <- ggtree(tree)
+
+# Add bootstraps less than 100
+d <- q$data
+d <- d[!d$isTip,]
+d$label <- as.numeric(d$label)
+d <- d[d$label < 100,]
+
+heatmap<-mydata[c(6,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25 )]
+
+
+# Plot the tree and save to pdf 
+q2<- q +  geom_text2(data=d, aes(label=label), size=1.5, adj = -0.2)
+q3 <- q2 %<+% mydata + geom_tiplab(aes(color=clade), size=3, hjust=-0.25)
+
+
+q4<-gheatmap(q3, heatmap, width=1, offset=0.2, font.size=2, colnames_angle=90, colnames_position='top',colnames_offset_y=1)   + scale_fill_manual(breaks=c("Betulaceae","Datiscaceae","Elaeagnaceae","Casuarinaceae","Coriariaceae","Rhamnaceae","Myricaceae","N.America","S.Asia","Africa","SE.Asia","S.America","Europe","n","y", "5", "6","7", "8", "9", "10", "0") , values=c("brown1","darkseagreen1","seagreen3","royalblue1","skyblue1","lightcoral","darkorange","springgreen4","red","cornflowerblue","plum3","white","darkgoldenrod1","lightpink","black", "blue","green","dodgerblue1"))
+
+pdf(file = "/Users/hulinm/Documents/frankia_tree_auxins5.pdf",width=7.2,height=10)
+q4+theme(legend.position="bottom", legend.title=element_blank()) + guides(colour=FALSE) 
+dev.off()
+
+
+
